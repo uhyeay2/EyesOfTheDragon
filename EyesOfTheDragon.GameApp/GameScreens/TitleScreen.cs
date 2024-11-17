@@ -44,7 +44,7 @@ namespace EyesOfTheDragon.GameApp.GameScreens
                 Color.White
             );
 
-            _game.SpriteBack.End();
+            _game.SpriteBatch.End();
         }
 
         #endregion
