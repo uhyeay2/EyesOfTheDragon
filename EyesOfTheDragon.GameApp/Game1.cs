@@ -20,6 +20,7 @@ namespace EyesOfTheDragon.GameApp
         private readonly Rectangle _screenRectangle = new (x: 0, y: 0, ScreenSize.DefaultWidth, ScreenSize.DefaultHeight);
 
         private TitleScreen _titleScreen;
+        private StartMenuScreen _startMenuScreen;
 
         #endregion
 
@@ -36,7 +37,8 @@ namespace EyesOfTheDragon.GameApp
             _gameStateManager = new GameStateManager(this);
             Components.Add(_gameStateManager);
 
-            _titleScreen = new TitleScreen(this, _gameStateManager);
+            _titleScreen = new(this, _gameStateManager);
+            _startMenuScreen = new(this, _gameStateManager);
 
             _gameStateManager.ChangeState(TitleScreen);
         }
@@ -50,6 +52,7 @@ namespace EyesOfTheDragon.GameApp
         public SpriteBatch SpriteBatch => _spriteBatch;
 
         public TitleScreen TitleScreen => _titleScreen;
+        public StartMenuScreen StartMenuScreen => _startMenuScreen;
 
         #endregion
 

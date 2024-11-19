@@ -30,6 +30,9 @@
     <ProjectReference Include="..\EyesOfTheDragon.MGRpgLibrary\EyesOfTheDragon.MGRpgLibrary.csproj" />
     <ProjectReference Include="..\EyesOfTheDragon.RpgLibrary\EyesOfTheDragon.RpgLibrary.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Fonts\" />
+  </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />
