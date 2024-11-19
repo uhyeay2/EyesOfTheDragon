@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace EyesOfTheDragon.MGRpgLibrary.Controls
@@ -30,6 +31,12 @@ namespace EyesOfTheDragon.MGRpgLibrary.Controls
         {
             _spriteFont = spriteFont;
         }
+
+        #endregion
+
+        #region Event Handlers
+
+        public event EventHandler FocusChangedEventHandler;
 
         #endregion
 
@@ -109,6 +116,8 @@ namespace EyesOfTheDragon.MGRpgLibrary.Controls
 
                 if (this[_selectedControl].TabStop && this[_selectedControl].Enabled)
                 {
+                    FocusChangedEventHandler?.Invoke(this[_selectedControl], null);                    
+
                     break;
                 }
 
@@ -139,6 +148,8 @@ namespace EyesOfTheDragon.MGRpgLibrary.Controls
 
                 if (this[_selectedControl].TabStop && this[_selectedControl].Enabled)
                 {
+                    FocusChangedEventHandler?.Invoke(this[_selectedControl], null);
+
                     break;
                 }
 
