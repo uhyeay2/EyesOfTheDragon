@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace EyesOfTheDragon.MGRpgLibrary.Controls
@@ -30,6 +31,12 @@ namespace EyesOfTheDragon.MGRpgLibrary.Controls
         {
             _spriteFont = spriteFont;
         }
+
+        #endregion
+
+        #region Event Handlers
+
+        public event EventHandler FocusChangedEventHandler;
 
         #endregion
 
@@ -94,21 +101,23 @@ namespace EyesOfTheDragon.MGRpgLibrary.Controls
                 return;
             }
 
-            var currentControl = _selectedControl;
+            int currentControl = _selectedControl;
 
             this[_selectedControl].HasFocus = false;
-            
+
             do
             {
-                _selectedControl++;
+                _selectedControl--;
 
-                if (_selectedControl == Count)
+                if (_selectedControl < 0)
                 {
-                    _selectedControl = 0;
+                    _selectedControl = Count - 1;
                 }
 
                 if (this[_selectedControl].TabStop && this[_selectedControl].Enabled)
                 {
+                    FocusChangedEventHandler?.Invoke(this[_selectedControl], null);
+
                     break;
                 }
 
@@ -124,26 +133,28 @@ namespace EyesOfTheDragon.MGRpgLibrary.Controls
                 return;
             }
 
-            int currentControl = _selectedControl;
+            var currentControl = _selectedControl;
 
             this[_selectedControl].HasFocus = false;
 
             do
             {
-                _selectedControl--;
-                
-                if (_selectedControl < 0)
+                _selectedControl++;
+
+                if (_selectedControl == Count)
                 {
-                    _selectedControl = Count - 1;
+                    _selectedControl = 0;
                 }
 
                 if (this[_selectedControl].TabStop && this[_selectedControl].Enabled)
                 {
+                    FocusChangedEventHandler?.Invoke(this[_selectedControl], null);
+
                     break;
                 }
 
             } while (currentControl != _selectedControl);
-            
+
             this[_selectedControl].HasFocus = true;
         }
 
