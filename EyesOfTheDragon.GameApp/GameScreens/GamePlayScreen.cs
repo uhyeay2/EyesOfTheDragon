@@ -1,8 +1,11 @@
 ﻿using EyesOfTheDragon.GameApp.Constants.Tilesets;
+using EyesOfTheDragon.MGRpgLibrary.Components;
 using EyesOfTheDragon.MGRpgLibrary.GameComponents;
 using EyesOfTheDragon.MGRpgLibrary.TileEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 namespace EyesOfTheDragon.GameApp.GameScreens
 {
@@ -11,8 +14,8 @@ namespace EyesOfTheDragon.GameApp.GameScreens
         #region Private Fields
 
         private Engine engine = new Engine(32, 32);
-        private Tileset _tileset;
         private TileMap _map;
+        private Player _player;
 
         #endregion
 
@@ -20,6 +23,7 @@ namespace EyesOfTheDragon.GameApp.GameScreens
 
         public GamePlayScreen(Game game, GameStateManager stateManager) : base(game, stateManager)
         {
+            _player = new Player(_game);
         }
 
         #endregion
@@ -28,21 +32,49 @@ namespace EyesOfTheDragon.GameApp.GameScreens
 
         protected override void LoadContent()
         {
-            _tileset = Exterior1.LoadTileset(_game.Content);
+            base.LoadContent();
 
-            var groundLayer = new Tile[32, 32];
+            var tileset1 = Exterior1.LoadTileset(_game.Content);
+            var tileset2 = Exterior2.LoadTileset(_game.Content);
 
-            for (int y = 0; y < groundLayer.GetLength(0); y++)
+            var tilesets = new List<Tileset>() { tileset1, tileset2 };
+
+            var groundLayer = new MapLayer(40, 40);
+
+            for (int y = 0; y < groundLayer.Height; y++)
             {
-                for (int x = 0; x < groundLayer.GetLength(1); x++)
+                for (int x = 0; x < groundLayer.Width; x++)
                 {
-                    groundLayer[y, x] = new Tile(1, 0);
+                    Tile tile = new Tile(0, 0);
+                    groundLayer.SetTile(x, y, tile);
                 }
             }
 
-            _map = new TileMap(_tileset, new MapLayer(groundLayer));
+            MapLayer splatter = new MapLayer(40, 40);
 
-            base.LoadContent();
+            Random random = new Random();
+            
+            for (int i = 0; i < 80; i++)
+            {
+                int x = random.Next(0, 40);
+                int y = random.Next(0, 40);
+                int index = random.Next(2, 14);
+                Tile tile = new Tile(index, 0);
+                splatter.SetTile(x, y, tile);
+            }
+
+            splatter.SetTile(1, 0, new Tile(0, 1));
+            splatter.SetTile(2, 0, new Tile(2, 1));
+            splatter.SetTile(3, 0, new Tile(0, 1));
+
+            _map = new TileMap(tilesets, [groundLayer, splatter]);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            _player.Update(gameTime);
+
+            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -57,7 +89,7 @@ namespace EyesOfTheDragon.GameApp.GameScreens
                 Matrix.Identity
             );
 
-            _map.Draw(_game.SpriteBatch);
+            _map.Draw(_game.SpriteBatch, _player.Camera);
 
             base.Draw(gameTime);
 
