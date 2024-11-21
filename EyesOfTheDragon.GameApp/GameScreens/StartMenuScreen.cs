@@ -3,7 +3,6 @@ using EyesOfTheDragon.MGRpgLibrary.Controls;
 using EyesOfTheDragon.MGRpgLibrary.GameComponents;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace EyesOfTheDragon.GameApp.GameScreens
@@ -69,7 +68,7 @@ namespace EyesOfTheDragon.GameApp.GameScreens
             _exitGameLinkLabel.Selected += new EventHandler(MenuItemSelectedEventHandler);
             _controlManager.Add(_exitGameLinkLabel);
 
-            _controlManager.PreviousControl();
+            _controlManager.NextControl();
             _controlManager.FocusChangedEventHandler += new EventHandler(ControlManagerChangeFocusEventHandler);
 
             var position = new Vector2(350, 500);
@@ -118,7 +117,7 @@ namespace EyesOfTheDragon.GameApp.GameScreens
         {
             if (sender == _startGameLinkLabel)
             {
-                _stateManager.PushState(_game.GamePlayScreen);
+                _stateManager.PushState(_game.CharacterGeneratorScreen);
             }
             else if (sender == _loadGameLinkLabel)
             {

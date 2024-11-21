@@ -72,6 +72,7 @@ namespace EyesOfTheDragon.MGRpgLibrary.Controls
                 || InputHandler.IsKeyPressed(Keys.Up))
                 {
                     PreviousControl();
+                    InputHandler.Flush();
                 }
 
                 if (InputHandler.IsGamePadButtonPressed(Buttons.LeftThumbstickDown, playerIndex)
@@ -79,7 +80,9 @@ namespace EyesOfTheDragon.MGRpgLibrary.Controls
                 || InputHandler.IsKeyPressed(Keys.Down))
                 {
                     NextControl();
+                    InputHandler.Flush();
                 }
+
             }
         }
 
@@ -94,7 +97,7 @@ namespace EyesOfTheDragon.MGRpgLibrary.Controls
             }
         }
 
-        public void NextControl()
+        public void PreviousControl()
         {
             if (Count == 0)
             {
@@ -126,7 +129,7 @@ namespace EyesOfTheDragon.MGRpgLibrary.Controls
             this[_selectedControl].HasFocus = true;
         }
 
-        public void PreviousControl()
+        public void NextControl()
         {
             if (Count == 0)
             {

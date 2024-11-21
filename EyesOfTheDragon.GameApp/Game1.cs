@@ -22,6 +22,7 @@ namespace EyesOfTheDragon.GameApp
         private TitleScreen _titleScreen;
         private StartMenuScreen _startMenuScreen;
         private GamePlayScreen _gamePlayScreen;
+        private CharacterGeneratorScreen _characterGeneratorScreen;
 
         #endregion
 
@@ -41,6 +42,7 @@ namespace EyesOfTheDragon.GameApp
             _titleScreen = new(this, _gameStateManager);
             _startMenuScreen = new(this, _gameStateManager);
             _gamePlayScreen = new(this, _gameStateManager);
+            _characterGeneratorScreen = new(this, _gameStateManager);
 
             _gameStateManager.ChangeState(TitleScreen);
         }
@@ -56,6 +58,7 @@ namespace EyesOfTheDragon.GameApp
         public TitleScreen TitleScreen => _titleScreen;
         public StartMenuScreen StartMenuScreen => _startMenuScreen;
         public GamePlayScreen GamePlayScreen => _gamePlayScreen;
+        public CharacterGeneratorScreen CharacterGeneratorScreen => _characterGeneratorScreen;
 
         #endregion
 
