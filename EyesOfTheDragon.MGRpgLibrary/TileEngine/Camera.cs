@@ -1,4 +1,6 @@
-﻿using EyesOfTheDragon.MGRpgLibrary.GameComponents;
+﻿using EyesOfTheDragon.MGRpgLibrary.Enums;
+using EyesOfTheDragon.MGRpgLibrary.GameComponents;
+using EyesOfTheDragon.MGRpgLibrary.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -23,6 +25,7 @@ namespace EyesOfTheDragon.MGRpgLibrary.TileEngine
             _zoom = 1f;
             _viewportRectangle = viewportRect;
         }
+
         public Camera(Rectangle viewportRect, Vector2 position)
         {
             _speed = 4f;
@@ -34,6 +37,8 @@ namespace EyesOfTheDragon.MGRpgLibrary.TileEngine
         #endregion
 
         #region Public Accessors
+        
+        public CameraMode CameraMode = CameraMode.Follow;
 
         public Vector2 Position => _position;
 
@@ -47,37 +52,60 @@ namespace EyesOfTheDragon.MGRpgLibrary.TileEngine
 
         public void Update(GameTime gameTime)
         {
+            if (CameraMode == CameraMode.Follow)
+            {
+                return;
+            }
+
             var motion = Vector2.Zero;
 
-            if (InputHandler.IsKeyDown(Keys.Left))
+            if (InputHandler.IsKeyDown(Keys.Left) 
+            || InputHandler.IsGamePadButtonDown(Buttons.RightThumbstickLeft, PlayerIndex.One))
             {
                 motion.X -= _speed;
             }
             
-            if (InputHandler.IsKeyDown(Keys.Right))
+            if (InputHandler.IsKeyDown(Keys.Right)
+            || InputHandler.IsGamePadButtonDown(Buttons.RightThumbstickRight, PlayerIndex.One))
             {
                 motion.X += _speed;
             }
 
-            if (InputHandler.IsKeyDown(Keys.Up))
+            if (InputHandler.IsKeyDown(Keys.Up)
+            || InputHandler.IsGamePadButtonDown(Buttons.RightThumbstickUp, PlayerIndex.One))
             {
                 motion.Y -= _speed;
             }
             
-            if (InputHandler.IsKeyDown(Keys.Down))
+            if (InputHandler.IsKeyDown(Keys.Down)
+            || InputHandler.IsGamePadButtonDown(Buttons.RightThumbstickDown, PlayerIndex.One))
             {
                 motion.Y += _speed;
             }
 
             if (motion != Vector2.Zero)
             {
-                motion = Vector2.Normalize(motion);
-            }
+                motion.Normalize();
 
-            _position += motion * _speed;
+                _position += motion * _speed;
+
+                ClampCamera();
+            }
+        }
+
+        //TODO: base Sprite instead of AnimatedSprite?
+        public void LockPositionToSprite(AnimatedSprite sprite)
+        {
+            _position.X = sprite.Position.X + sprite.Width / 2 - (_viewportRectangle.Width / 2);
+
+            _position.Y = sprite.Position.Y + sprite.Height / 2 - (_viewportRectangle.Height / 2);
 
             ClampCamera();
         }
+
+        #endregion
+
+        #region Private Methods
 
         private void ClampCamera()
         {
